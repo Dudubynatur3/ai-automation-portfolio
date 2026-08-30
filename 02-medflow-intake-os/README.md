@@ -2,110 +2,153 @@
 
 **Status:** Completed client-style portfolio system using synthetic healthcare data  
 **Stack:** Jotform, Make.com, Airtable, Google Sheets, Gmail/Outlook, Google Calendar  
-**Pattern:** Intake validation, deduplication, linked records, conditional routing, audit logging, human handoff
+**Pattern:** Intake validation, deduplication, routing, CRM writes, audit logging, notifications, provisional scheduling
 
 ## Business problem
 
-Operational intake becomes fragile when form submissions are manually copied between spreadsheets, case records, task lists, and staff inboxes. Duplicate patient records, incomplete handoffs, missed urgency signals, and poor auditability are common failure modes.
+MedFlow Health is a simulated early-stage telehealth and in-person clinic startup. The portfolio scenario models a small operations team receiving patient intake through a website form without a dedicated EHR/CRM.
 
-MedFlow Intake OS demonstrates how a healthcare-style intake process can be structured as an auditable automation system without claiming to be a production clinical platform.
+The manual process creates operational risk: intake data can be copied inconsistently, duplicate patient records can be created, urgent submissions can be missed, consent can be mishandled, and staff can lack a reliable audit trail.
 
-## Solution architecture
+This project demonstrates an auditable automation design for that intake process. It is not presented as a production clinical system.
+
+## System architecture
+
+The recovered project documentation defines MedFlow as an event-driven pipeline:
 
 ```mermaid
 flowchart TD
-    A[Jotform Patient Intake] --> B[Validate and Normalize]
-    B --> C{Existing Patient?}
-    C -->|Email match| D[Update Patient]
-    C -->|No email match| E{Phone match?}
-    E -->|Yes| D
-    E -->|No| F[Create Patient]
-    D --> G[Create Intake]
-    F --> G
-    G --> H[Create Case]
-    H --> I[Create Tasks]
-    I --> J{Urgency / Consent Routing}
-    J --> K[Notify Staff]
-    J --> L[Notify Patient]
-    J --> M[Manual Handoff when required]
-    K --> N[Audit to Routing Log / Google Sheets]
-    L --> N
-    M --> N
+    A[Patient] --> B[Jotform Intake]
+    B -->|Webhook| C[Make.com Orchestration]
+    C --> D[Validate and Normalize]
+    D --> E[Deduplicate / Patient Lookup]
+    E --> F[Airtable CRM]
+    D --> G{Main Router}
+    G --> H[Staff Notification]
+    G --> I[Patient Confirmation]
+    G --> J[Provisional Calendar Action]
+    C --> K[Google Sheets Append-only Audit Log]
+    F --> K
 ```
 
-## Data model
+Make.com orchestrates validation, deduplication, routing, CRM writes, audit logging, and notifications. Airtable is the system of record. Google Sheets is the append-only audit log. Gmail/Outlook and Google Calendar support communication and provisional scheduling.
 
-The portfolio operating model uses linked records across:
+## Airtable data model
 
-- Patients
-- Intakes
-- Cases
-- Tasks
-- Routing_Log
-- Staff
+The original documented CRM schema contains four tables:
 
-This separates identity, each intake event, the resulting operational case, assigned work, audit history, and staff ownership rather than forcing everything into one flat table.
+- `Patients`
+- `Intakes`
+- `Routing_Log`
+- `Staff`
+
+This is the table structure supported by the recovered project package and is the structure documented here.
 
 ## Key implementation logic
 
 ### Duplicate protection
 
-Patient lookup uses:
+The workflow searches for an existing patient before creating a new identity record. The design uses email as the primary lookup and phone as a fallback where required.
 
-1. email as the primary match
-2. phone as a fallback match
-3. create only when no existing patient match is found
+### Jotform pre-sorting
 
-The intent is to reduce duplicate records before downstream case creation.
+Jotform conditional logic keeps the intake form focused, surfaces emergency guidance where appropriate, and displays follow-up questions only when needed.
 
-### Conditional routing
+The form **pre-sorts** the submission. Make.com remains responsible for the final operational routing decision.
 
-The workflow evaluates intake context such as urgency and consent before determining the correct operational path. Jotform can pre-sort the intake experience, while Make.com performs the final workflow routing.
+### Make.com routing precedence
 
-### Human handoff
+The recovered scenario documentation defines a top-down routing model. Higher-priority rules win. The first documented controls include:
 
-The project deliberately preserves manual intervention where automated processing should not make an unsupported decision. This is a core design principle, especially for healthcare-style workflows.
+1. required fields missing → `NEEDS_REVIEW`
+2. contact or data consent missing → `MISSING_CONSENT`
+3. downstream urgency / follow-up routes evaluated after those safety controls
 
-### Auditability
+This ordering prevents incomplete or non-consented submissions from being treated as ordinary scheduling requests.
 
-Routing outcomes are written to structured records so the operational path can be inspected after execution. Google Sheets is used as an additional audit/backup surface in the portfolio build.
+### Audit logging
+
+The Google Sheets audit log is designed as append-only operational evidence. It records what happened during the scenario without duplicating unnecessary clinical detail.
+
+The documentation explicitly uses a minimal-data-routing approach, including masked identifiers in the audit surface rather than copying full clinical narratives into the log.
+
+### Staff notifications
+
+Staff email templates are designed to carry only the operational information needed for action. Detailed intake information remains in Airtable and is accessed through the record rather than copied unnecessarily into email.
+
+### Patient communication
+
+Patient-facing templates are designed to acknowledge the intake without implying a diagnosis. The recovered documentation explicitly avoids echoing unnecessary clinical detail back into email.
+
+## Field mapping
+
+The project documents an end-to-end integration contract:
+
+```text
+Jotform unique name
+        ↓
+Make.com variable / transform
+        ↓
+Airtable field
+        ↓
+Audit-log column where applicable
+```
+
+This makes cross-system data mapping explicit rather than relying on undocumented visual connections.
+
+## Make.com scenario blueprint
+
+Scenario name in the recovered documentation:
+
+**MedFlow - Intake Orchestration v1**
+
+The project package contains a logic-level Make.com blueprint describing modules in build order and their key mappings. It intentionally does not claim that an account-specific Make export can be shared safely without reviewing connection details.
+
+## Test data
+
+The project includes a synthetic patient test set designed to exercise different routes. Test identities use fictional names, `.example` email addresses, and reserved-style test phone numbers.
+
+No real patient information should be used in the public portfolio.
 
 ## Privacy and scope
 
-- Synthetic data only for portfolio demonstrations.
-- This is not presented as a HIPAA-compliant production system.
-- No real patient records are included in this repository.
-- Public documentation avoids account IDs, credentials, and private endpoints.
+- Synthetic data only.
+- HIPAA-aware design discussion, **not** a claim of HIPAA compliance.
+- No real patient information in the public repository.
+- Minimal-data-routing is used for notifications and audit logs.
+- Credentials, account IDs, private endpoints, and connection details are excluded from public artifacts.
 
-## Engineering evidence
+## Recovered engineering package
 
-The original project package includes detailed design material covering:
+The original project package contains documentation for:
 
 - business problem summary
 - system architecture
-- workflow diagrams
-- Jotform intake structure
-- Jotform conditional branching
+- Mermaid diagrams
+- Jotform intake form structure
+- Jotform conditional branching logic
 - Airtable CRM schema
-- field mapping
+- CRM field mapping
 - Make.com scenario blueprint
 - routing rules
-- testing and presentation guidance
+- synthetic test data
+- Google Sheets audit-log design
+- staff notification templates
+- patient confirmation templates
+- QA / test guidance
+- presentation / handover material
 
-## Why this project matters
+## Skills demonstrated
 
-MedFlow demonstrates more than connecting apps. It shows:
-
-- data-model design
-- record identity and deduplication
+- workflow architecture
+- Jotform conditional logic
+- Make.com orchestration
+- Airtable CRM design
+- deduplication
 - cross-system field mapping
-- conditional workflow orchestration
-- linked-record creation
-- notification design
-- human-in-the-loop control
+- consent-aware routing
 - audit logging
-- privacy-conscious portfolio testing
-
-## Implementation status
-
-This project is a portfolio/client-style implementation built with synthetic data. It demonstrates system architecture and workflow engineering, not a claim of clinical deployment.
+- notification design
+- human-safe operational controls
+- synthetic test-data design
+- documentation and handover
