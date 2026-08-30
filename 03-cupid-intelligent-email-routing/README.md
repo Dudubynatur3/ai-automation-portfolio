@@ -53,6 +53,8 @@ flowchart LR
     N5 --> Z
 ```
 
+Detailed control architecture: [`ARCHITECTURE.md`](./ARCHITECTURE.md)
+
 ## Duplicate protection
 
 Before AI classification, the workflow checks the incoming Gmail/message ID against a processed-email data store.
@@ -106,18 +108,14 @@ This matters because marking a failed email as processed would hide work that st
 - Failed runs are not falsely recorded as successful.
 - Logging provides an audit trail for downstream review.
 
-## Portfolio evidence
+## Evidence package
 
-The project evidence includes a detailed workflow architecture diagram covering:
-
-- inbox intake and field extraction
-- duplicate protection
-- AI classification
-- confidence validation
-- five-way department switch
-- department email and Slack actions
-- processed-email logging
-- fallback and failure paths
+| Evidence | Public status |
+|---|---|
+| Architecture and business logic | Published in this README |
+| Detailed control design | [`ARCHITECTURE.md`](./ARCHITECTURE.md) |
+| Original hand-drawn architecture diagram | Recovered from project records, pending safe public image publication |
+| Account-specific n8n export | Not published until source export is recovered and sanitized |
 
 ## Skills demonstrated
 
