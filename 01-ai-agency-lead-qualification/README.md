@@ -93,6 +93,8 @@ The test sequence validated:
 - Google Sheets append
 - Gmail acknowledgement
 
+Detailed test notes: [`TESTING.md`](./TESTING.md)
+
 ## Reliability and design decisions
 
 - Controlled dropdown inputs reduce ambiguity.
@@ -115,6 +117,15 @@ Before use, connect your own:
 - Google Sheet / tab
 
 No original credential IDs or private spreadsheet identifiers are included in the public export.
+
+## Evidence package
+
+| Evidence | Public status |
+|---|---|
+| Architecture / business logic | Published in this README |
+| Five-route test record | [`TESTING.md`](./TESTING.md) |
+| Sanitized workflow JSON | [`workflow/ai-agency-lead-qualification.sanitized.json`](./workflow/ai-agency-lead-qualification.sanitized.json) |
+| Original execution visuals | Recovered from project records and being curated for safe public publication |
 
 ## Portfolio positioning
 
