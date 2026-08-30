@@ -153,19 +153,32 @@ Each item should expose:
 
 ## 6. MedFlow wording
 
-Use the recovered original project package as the source of truth.
+The connected Airtable base is now the strongest data-model source of truth and directly confirms a **six-table relational system**:
+
+- `Patients`
+- `Intakes`
+- `Cases`
+- `Tasks`
+- `Routing_Log`
+- `Staff`
 
 Correct public evidence:
 
 - Jotform → Make.com → Airtable → Google Sheets → Gmail/Outlook → Google Calendar
-- original Airtable documentation identifies `Patients`, `Intakes`, `Routing_Log`, `Staff`
+- duplicate checking using email with normalized-phone fallback
+- patient create/update plus separate intake records
+- case creation from routed intakes
+- task generation and staff assignment
+- relational links across patients, intakes, cases, tasks, routing logs, and staff
 - synthetic data only
 - HIPAA-aware design discussion, not HIPAA compliance
-- append-oriented audit log
+- append-oriented audit logging
 - consent and missing-data routing controls
-- minimal-data routing for notifications and audit evidence
+- masked identifiers in routing/audit evidence
 
-Do not describe MedFlow as a six-table system unless a separate later implementation is recovered with direct evidence.
+The earlier four-table note came from an incomplete documentation snapshot and should no longer be used for the portfolio or CVs.
+
+Detailed schema evidence: `02-medflow-intake-os/DATA_MODEL.md`.
 
 ## 7. Production experience
 
@@ -252,3 +265,4 @@ Before the revised site is treated as application-ready:
 - verify no screenshot exposes credentials or customer data
 - ensure project classifications are visible
 - verify AI Automation Portfolio links render correctly
+- ensure MedFlow is consistently described as the verified six-table implementation
