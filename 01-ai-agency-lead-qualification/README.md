@@ -33,7 +33,7 @@ flowchart LR
     S2 --> E2[Send Gmail acknowledgement]
     S3 --> E3[Send Gmail acknowledgement]
     S4 --> E4[Send Gmail acknowledgement]
-    S5 --> E5[Send Gmail acknowledgement]
+    X --> E5[Send Gmail acknowledgement]
 ```
 
 ## Why deterministic routing instead of AI classification?
@@ -102,21 +102,21 @@ Detailed test notes: [`TESTING.md`](./TESTING.md)
 - Each final route assigns a status before downstream actions.
 - CRM persistence occurs before the email step.
 - The workflow uses synthetic test data for portfolio evidence.
-- Public workflow artifacts are sanitized before publication.
+- Public evidence is sanitized and intentionally scoped rather than published as a turnkey deployment package.
 
-## Importable workflow
+## Public implementation evidence
 
-A sanitized n8n export is included here:
+This project publishes enough technical evidence to inspect the engineering decisions without shipping the complete reusable n8n workflow.
 
-[`workflow/ai-agency-lead-qualification.sanitized.json`](./workflow/ai-agency-lead-qualification.sanitized.json)
+Published evidence includes:
 
-Before use, connect your own:
+- the architecture and node-flow model above
+- exact business-routing rules
+- persisted data contract
+- five-route execution/test record
+- reliability and implementation decisions
 
-- Google Sheets OAuth credential
-- Gmail OAuth credential
-- Google Sheet / tab
-
-No original credential IDs or private spreadsheet identifiers are included in the public export.
+The complete deployable n8n export is intentionally **not included on the current public branch**. See [`workflow/README.md`](./workflow/README.md) for the publication rationale.
 
 ## Evidence package
 
@@ -124,7 +124,7 @@ No original credential IDs or private spreadsheet identifiers are included in th
 |---|---|
 | Architecture / business logic | Published in this README |
 | Five-route test record | [`TESTING.md`](./TESTING.md) |
-| Sanitized workflow JSON | [`workflow/ai-agency-lead-qualification.sanitized.json`](./workflow/ai-agency-lead-qualification.sanitized.json) |
+| Complete reusable workflow export | Intentionally withheld from the current public branch |
 | Original execution visuals | Recovered from project records and being curated for safe public publication |
 
 ## Portfolio positioning
@@ -138,4 +138,4 @@ This project demonstrates:
 - CRM-style persistence
 - automated customer acknowledgement
 - execution testing across multiple outcomes
-- security-conscious workflow publishing
+- evidence-conscious workflow publishing
