@@ -24,7 +24,7 @@ Keep the supporting positioning around AI Automation with a Cloud / DevOps found
 
 ### Replace the repository-count metric
 
-The current `CONNECTED REPOS` number is a weak metric because repository count can include small supporting repos and forks.
+The current `CONNECTED REPOS` number is a weak metric because repository count can include small supporting repos, collaborative repositories, and forks.
 
 Recommended metric block:
 
@@ -35,25 +35,23 @@ Recommended metric block:
 | Feature branches validated | 40+ |
 | User roles regression tested | 6 |
 
-This is more meaningful and less likely to become stale when a repository is added.
-
 ## 2. Featured work
 
-The featured cards should prioritise authored, inspectable evidence.
+Featured cards should prioritise clearly authored, inspectable evidence.
 
-### Recommended featured card 1
+### Featured card 1
 
 **AI Agency Lead Capture & Qualification**  
 Category: AI Automation  
 Stack: n8n, Google Sheets, Gmail  
-Proof: five tested routing outcomes, public portfolio-safe n8n JSON, architecture and qualification logic  
+Proof: five tested routing outcomes, public portfolio-safe n8n JSON, architecture, and qualification logic  
 Link: `https://github.com/Dudubynatur3/ai-automation-portfolio/tree/main/01-ai-agency-lead-qualification`
 
 Suggested summary:
 
 > Deterministic lead qualification system that classifies enquiries by timeline and budget, records the final status in Google Sheets, and triggers immediate customer acknowledgement. Five final routing outcomes were tested.
 
-### Recommended featured card 2
+### Featured card 2
 
 **WhatsApp AI Order Processor**  
 Category: AI Automation  
@@ -61,45 +59,79 @@ Stack: n8n, Twilio pattern, OpenAI, Google Sheets, Stripe pattern, Telegram
 Proof: detailed README, workflow screenshot, importable demo JSON  
 Link: `https://github.com/Dudubynatur3/whatsapp-order-processor`
 
-Keep this card, but preserve the repo's explicit `Demo Mode` wording so mocked integrations are not represented as live commercial integrations.
+Keep the repository's explicit `Demo Mode` wording so mocked integrations are not represented as live commercial integrations.
 
-### Recommended featured card 3
+### Featured card 3
 
-**EpicBook Full-stack Infrastructure**  
-Category: Cloud / Infrastructure as Code  
-Stack: Azure, Terraform, Ansible, Nginx  
+**AWS High-Availability 3-Tier System**  
+Category: Cloud Infrastructure  
+Stack: AWS, Terraform, EC2, ALB, RDS MySQL, NAT Gateway, Nginx, Next.js  
+Link: `https://github.com/Dudubynatur3/aws-3tier-terraform-nextjs`
+
+Why this is a stronger feature than the current fork-derived cards:
+
+- original repository, not a fork
+- clear architecture documentation
+- three network tiers
+- public and internal ALBs
+- RDS Multi-AZ and read replica
+- infrastructure teardown guidance
+- screenshots and troubleshooting evidence already present
+
+## 3. Cloud supporting work
+
+Immediately below the three headline cards, surface a compact Cloud / DevOps row with:
+
+### GCP End-of-Training Terraform Project
+
+Link: `https://github.com/Dudubynatur3/gcp-exercise`
+
+Evidence includes Terraform VPC/subnets, Compute Engine, IAM, Linux, Flask, Cloud SQL, GKE, GCP folder hierarchy, and hands-on screenshots.
+
+### EpicBook Full-stack Infrastructure
+
 Link: `https://github.com/Dudubynatur3/epicbook-fullstack`
 
-This repository is not a GitHub fork and is the cleaner cloud project to feature prominently.
+Evidence includes Azure, Terraform, Ansible, Nginx, and infrastructure automation.
 
-## 3. Remove two current featured cards from authored-work positioning
+### Automated Developer Onboarding
+
+Link: `https://github.com/Dudubynatur3/dev-onboarding-automation`
+
+Evidence includes Terraform, AWS, Bash, Linux user/group management, and repeatable onboarding automation.
+
+## 4. Remove two current cards from authored-work positioning
 
 ### `3-Tier-MERN-App`
 
-GitHub metadata identifies `Dudubynatur3/3-Tier-MERN-App` as a **fork** of `AkingbadeOmosebi/Aksforge`.
+GitHub metadata identifies `Dudubynatur3/3-Tier-MERN-App` as a fork of `AkingbadeOmosebi/Aksforge`.
 
-The fork's current head is an upstream-authored commit. It should therefore **not** be presented as an authored production-grade platform project unless separate, verifiable personal contributions are identified.
+User clarification confirms that it was only forked and no personal implementation work was performed in that repository.
 
-Recommended action: remove it from Featured Work. If retained anywhere, label it clearly as a forked lab/reference project and specify only independently verified personal contributions.
+**Decision: remove it from the portfolio site as personal engineering evidence.**
+
+It does not need to be deleted from GitHub, but the portfolio should not claim its production, GitOps, security, or observability implementation as authored work.
 
 ### `Azure-Terraform-Project`
 
-GitHub metadata identifies `Dudubynatur3/Azure-Terraform-Project` as a **fork** of `vincegwu/aks-terraform-project`.
+GitHub metadata identifies `Dudubynatur3/Azure-Terraform-Project` as a fork of `vincegwu/aks-terraform-project`.
 
-The fork and upstream repository currently point to the same main-branch commit. It should therefore **not** be presented as an independently authored `Azure Internal Developer Platform` project.
+User clarification: this was the final collaborative group project in the Cloud Advisory training. Vince created the shared repository and Aduroja Akintade completed his assigned project contribution.
 
-Recommended action: remove it from Featured Work. Do not use it as primary portfolio evidence unless personal changes are later documented separately.
+**Decision: remove it from Featured Work.**
 
-## 4. New AI Automation Systems section
+The experience can remain in career history as collaborative Cloud Advisory project work, but the entire repository should not be presented as independently authored. A future case study is acceptable only if the specific personal contribution can be isolated and evidenced.
 
-Add a dedicated section after Featured Work or immediately before production experience.
+## 5. New AI Automation Systems section
+
+Add a dedicated section after Featured Work or immediately before Production Experience.
 
 Heading suggestion:
 
 > AI automation systems.  
 > Built around operational failure points.
 
-Include cards / rows for:
+Include:
 
 1. AI Agency Lead Capture & Qualification
 2. MedFlow Intake OS
@@ -108,38 +140,38 @@ Include cards / rows for:
 5. WhatsApp / Chatwoot CRM Automation
 6. AI-Assisted Customer Support with Human Review
 7. Self-Hosted n8n Platform
-8. WhatsApp AI Order Processor (standalone repository)
+8. WhatsApp AI Order Processor, linked to its standalone repository
 
 Each item should expose:
 
 - business problem
-- system / workflow architecture
+- workflow architecture
 - stack
 - implementation classification
 - evidence link
 - testing / control evidence
 
-## 5. MedFlow wording
+## 6. MedFlow wording
 
-Use the recovered project package as the source of truth.
+Use the recovered original project package as the source of truth.
 
 Correct public evidence:
 
 - Jotform → Make.com → Airtable → Google Sheets → Gmail/Outlook → Google Calendar
-- Airtable tables documented in the original package: `Patients`, `Intakes`, `Routing_Log`, `Staff`
+- original Airtable documentation identifies `Patients`, `Intakes`, `Routing_Log`, `Staff`
 - synthetic data only
 - HIPAA-aware design discussion, not HIPAA compliance
-- append-only audit log
+- append-oriented audit log
 - consent and missing-data routing controls
-- minimal-data-routing for notifications and audit evidence
+- minimal-data routing for notifications and audit evidence
 
-Do not describe MedFlow as a six-table system unless another later implementation with direct evidence is separately recovered.
+Do not describe MedFlow as a six-table system unless a separate later implementation is recovered with direct evidence.
 
-## 6. Production experience
+## 7. Production experience
 
 Keep the YTRanker section substantially as it is.
 
-Strengths to retain:
+Retain:
 
 - private production code label
 - March 2026 to July 2026 timeframe
@@ -149,21 +181,19 @@ Strengths to retain:
 - technical handover
 - verified Upwork client feedback
 
-Add a link to the public case-study write-up:
+Add a link to:
 
 `https://github.com/Dudubynatur3/ai-automation-portfolio/blob/main/commercial-case-studies/ytranker.md`
 
-Do **not** link to the private production source repository.
+Do not link to the private source repository.
 
-## 7. Working philosophy
+## 8. Working philosophy
 
 Keep:
 
 > Automation is useful. Reliability is the product.
 
-This is strongly aligned with the evidence architecture in the new repository.
-
-The supporting copy should explicitly mention:
+Supporting copy should explicitly mention:
 
 - deterministic logic where AI is unnecessary
 - AI classification where interpretation is required
@@ -173,45 +203,52 @@ The supporting copy should explicitly mention:
 - testing
 - documentation and handover
 
-## 8. Repository links
+## 9. Repository hierarchy
 
 Add the new repository prominently:
 
 `https://github.com/Dudubynatur3/ai-automation-portfolio`
 
-The site should no longer simply enumerate every public repository as equal proof. Use three evidence tiers:
+Do not enumerate every public repository as equal proof. Use four evidence tiers:
 
 ### Featured authored systems
 High-confidence, inspectable work.
 
-### Supporting repositories
-Smaller app/infrastructure repos that support the engineering history.
+### Supporting authored repositories
+Smaller app/infrastructure repositories supporting the engineering history.
 
-### Forked / learning references
-Only if useful, explicitly labelled as forks or labs. Never present these as independently authored systems.
+### Collaborative training work
+Group work with the user's own contribution described precisely.
 
-## 9. Final portfolio navigation
+### Forks / references
+Not used as personal engineering evidence unless an independent contribution is explicitly documented.
 
-Recommended top navigation remains simple:
+See `CLOUD_REPOSITORY_AUDIT.md` for the current classification.
+
+## 10. Navigation
+
+Keep:
 
 - Work
 - Experience
 - About
 - Let's talk
 
-Within Work, add filter labels:
+Within Work, use:
 
 `All | AI Automation | Cloud / DevOps | SaaS & Integrations`
 
-## 10. Publication gate
+## 11. Publication gate
 
 Before the revised site is treated as application-ready:
 
 - verify every project link
-- remove or relabel fork-derived claims
+- remove the 3-Tier-MERN fork from personal work
+- remove the Azure group-project fork from Featured Work
+- add the new AI Automation Portfolio
 - test mobile layout
 - test every CTA
 - confirm email / LinkedIn / GitHub links
 - verify no screenshot exposes credentials or customer data
 - ensure project classifications are visible
-- ensure new AI Automation Portfolio links render correctly
+- verify AI Automation Portfolio links render correctly
