@@ -2,7 +2,7 @@
 
 ## Scope
 
-MedFlow Intake OS is a client-style portfolio implementation built with synthetic healthcare data. Its purpose is to demonstrate structured intake automation, data integrity, routing controls, auditability, and human handoff.
+MedFlow Intake OS is a client-style portfolio implementation built with synthetic healthcare data. Its purpose is to demonstrate structured intake automation, data integrity, routing controls, auditability, case handling, task generation, and human handoff.
 
 ## Verified system flow
 
@@ -15,16 +15,20 @@ Jotform
 → Google Calendar
 ```
 
-## Airtable data model recovered from the original project package
+## Airtable data model, re-verified from the live base
 
-The original project documentation identifies four primary Airtable tables:
+Direct inspection of the connected MedFlow Airtable base confirms **six tables**:
 
 - `Patients`
 - `Intakes`
+- `Cases`
+- `Tasks`
 - `Routing_Log`
 - `Staff`
 
-Public portfolio documentation uses this recovered source rather than the later six-table summary that appeared in career notes.
+An earlier recovered documentation snapshot referenced four core tables, but the connected Airtable implementation is the stronger source of truth and confirms that `Cases` and `Tasks` are part of the implemented data model.
+
+See [`DATA_MODEL.md`](./DATA_MODEL.md) for the relational structure and representative fields.
 
 ## Intake processing
 
@@ -35,13 +39,17 @@ Key controls include:
 - required-field validation
 - normalized field mapping
 - duplicate checking before patient creation
+- patient create/update
+- intake creation
+- case creation
+- task generation
 - consent-aware routing
 - urgency-aware routing
-- manual review when the automated path should not decide independently
+- manual review where the automated path should not decide independently
 
 ## Duplicate checking
 
-The documented matching sequence uses email first, with phone as a fallback identity check.
+The documented matching sequence uses email first, with normalized phone available as a fallback identity check.
 
 ```text
 Search by email
@@ -51,6 +59,15 @@ Search by email
 ```
 
 The design goal is to avoid creating unnecessary duplicate patient identities before writing the intake event.
+
+## Case and task handling
+
+The live Airtable schema separates operational handling from intake data:
+
+- `Cases` tracks route, priority, status, patient, source intake, staff owner, timestamps, notes, and related tasks.
+- `Tasks` tracks follow-up work, due/completed timestamps, status, notes, parent case, and assigned staff.
+
+This separation makes operational ownership and follow-up work inspectable rather than hiding everything in a single record.
 
 ## Routing and notifications
 
@@ -62,12 +79,21 @@ Notifications are designed around minimum necessary information rather than copy
 
 The `Routing_Log` is treated as an append-oriented audit surface.
 
-It records enough information to understand:
+The live schema includes fields for:
 
-- what happened
-- which route was selected
-- when processing occurred
-- whether manual intervention was required
+- routing result
+- route
+- priority
+- routed timestamp
+- action taken
+- error message
+- scenario run ID
+- masked patient email
+- patient phone last four digits
+- consent status
+- deduplication result
+- linked intake
+- assigned staff
 
 Google Sheets provides an additional portfolio-visible audit / backup layer.
 
@@ -88,10 +114,13 @@ That design choice is important because the project demonstrates workflow engine
 
 - Jotform form design
 - Make.com orchestration
-- Airtable relational workflow design
+- six-table Airtable relational workflow design
 - cross-system field mapping
 - duplicate prevention
-- conditional routing
+- patient/intake separation
+- case creation
+- task generation and assignment
+- consent-aware conditional routing
 - notification design
 - manual escalation
 - audit logging
