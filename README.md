@@ -12,11 +12,13 @@ This repository complements my Cloud/DevOps repositories by documenting the auto
 - **Security by default.** Credentials, production webhook URLs, private document IDs, customer data, and secrets are removed from public artifacts.
 - **Reliability matters.** Routing rules, fallbacks, duplicate protection, human review, error handling, and operational handoff are treated as part of the system design.
 
+For the exact publication state of each project, see [EVIDENCE_STATUS.md](./EVIDENCE_STATUS.md). Public-artifact rules are documented in [SECURITY.md](./SECURITY.md).
+
 ## Featured automation systems
 
 | Project | Focus | Stack | Evidence status |
 |---|---|---|---|
-| [AI Agency Lead Capture & Qualification](./01-ai-agency-lead-qualification/) | Lead capture, deterministic qualification, CRM logging, acknowledgement | n8n, Google Sheets, Gmail | Workflow export recovered and sanitized; five routing outcomes tested |
+| [AI Agency Lead Capture & Qualification](./01-ai-agency-lead-qualification/) | Lead capture, deterministic qualification, CRM logging, acknowledgement | n8n, Google Sheets, Gmail | Portfolio-safe workflow JSON published; five routing outcomes tested |
 | [MedFlow Intake OS](./02-medflow-intake-os/) | Structured intake, deduplication, linked records, routing, audit logging | Jotform, Make.com, Airtable, Google Sheets | Client-style portfolio system using synthetic data; detailed implementation package recovered |
 | [Cupid Errands Intelligent Email Routing](./03-cupid-intelligent-email-routing/) | AI intent classification, duplicate protection, department routing, Slack/email notifications | n8n, OpenRouter, Email, Slack | Structured project implementation with architecture evidence |
 | [RAG & AI Agent Workflows](./04-rag-ai-agent-workflows/) | Document ingestion, embeddings, vector retrieval, agent memory | n8n, OpenRouter, OpenAI Embeddings, Supabase | Training implementation, explicitly labelled as such |
@@ -45,10 +47,12 @@ Key validated scope includes:
 - React, Supabase, and Vercel production platform work
 - Gmail OAuth, Telegram, WhatsApp, OpenRouter, Anthropic, and external integrations
 - AI-provider migration to OpenRouter
-- Role-based permissions and operational workflow controls
-- Regression testing across **6 user roles**
-- Validation of **40+ feature branches** before handover
-- Full technical handover documentation
+- role-based permissions and operational workflow controls
+- regression testing across **6 user roles**
+- validation of **40+ feature branches** before handover
+- full technical handover documentation
+
+Read the public case study: [commercial-case-studies/ytranker.md](./commercial-case-studies/ytranker.md)
 
 ## Related Cloud / DevOps work
 
@@ -60,13 +64,21 @@ See the public repositories on my GitHub profile: https://github.com/Dudubynatur
 
 ```text
 ai-automation-portfolio/
+├── README.md
+├── EVIDENCE_STATUS.md
+├── SECURITY.md
 ├── 01-ai-agency-lead-qualification/
+│   ├── README.md
+│   └── workflow/
+│       └── ai-agency-lead-qualification.sanitized.json
 ├── 02-medflow-intake-os/
 ├── 03-cupid-intelligent-email-routing/
 ├── 04-rag-ai-agent-workflows/
 ├── 05-whatsapp-chatwoot-crm/
 ├── 06-ai-support-human-review/
-└── 07-self-hosted-n8n-platform/
+├── 07-self-hosted-n8n-platform/
+└── commercial-case-studies/
+    └── ytranker.md
 ```
 
 ## Contact
