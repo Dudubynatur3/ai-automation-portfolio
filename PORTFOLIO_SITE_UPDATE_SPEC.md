@@ -1,10 +1,12 @@
 # Portfolio Site Update Specification
 
-This document defines the next update to the existing engineering portfolio site after creation of the AI Automation Portfolio repository.
+This document defines the evidence and content rules for the published engineering portfolio at:
+
+**https://aduroja-akintade.lovable.app**
 
 ## Keep the current visual system
 
-The existing site already has a strong visual identity:
+The site already has a strong visual identity:
 
 - cream / black / lime palette
 - large editorial typography
@@ -12,7 +14,7 @@ The existing site already has a strong visual identity:
 - distinct production-experience section
 - direct GitHub / LinkedIn / email calls to action
 
-A rebuild in another website builder is not required at this stage. The priority is evidence accuracy and stronger automation representation.
+A rebuild in another website builder is not required. The priority is evidence accuracy, stronger automation representation, and a non-turnkey public evidence policy.
 
 ## 1. Hero section
 
@@ -21,10 +23,6 @@ Keep:
 > I engineer the systems behind the outcome.
 
 Keep the supporting positioning around AI Automation with a Cloud / DevOps foundation.
-
-### Replace the repository-count metric
-
-The current `CONNECTED REPOS` number is a weak metric because repository count can include small supporting repos, collaborative repositories, and forks.
 
 Recommended metric block:
 
@@ -44,12 +42,14 @@ Featured cards should prioritise clearly authored, inspectable evidence.
 **AI Agency Lead Capture & Qualification**  
 Category: AI Automation  
 Stack: n8n, Google Sheets, Gmail  
-Proof: five tested routing outcomes, public portfolio-safe n8n JSON, architecture, and qualification logic  
+Proof: five tested routing outcomes, architecture, qualification logic, data contract, and sanitized implementation evidence  
 Link: `https://github.com/Dudubynatur3/ai-automation-portfolio/tree/main/01-ai-agency-lead-qualification`
 
 Suggested summary:
 
 > Deterministic lead qualification system that classifies enquiries by timeline and budget, records the final status in Google Sheets, and triggers immediate customer acknowledgement. Five final routing outcomes were tested.
+
+**Important:** Do not advertise a full public/importable n8n JSON for this project. The complete reusable export is intentionally withheld from the current public branch.
 
 ### Featured card 2
 
@@ -59,7 +59,7 @@ Stack: n8n, Twilio pattern, OpenAI, Google Sheets, Stripe pattern, Telegram
 Proof: detailed README, workflow screenshot, importable demo JSON  
 Link: `https://github.com/Dudubynatur3/whatsapp-order-processor`
 
-Keep the repository's explicit `Demo Mode` wording so mocked integrations are not represented as live commercial integrations.
+Keep the repository's explicit **DEMO MODE** wording so mocked integrations are not represented as live commercial integrations. This intentionally open sample is the exception where a reusable workflow export is appropriate.
 
 ### Featured card 3
 
@@ -68,7 +68,7 @@ Category: Cloud Infrastructure
 Stack: AWS, Terraform, EC2, ALB, RDS MySQL, NAT Gateway, Nginx, Next.js  
 Link: `https://github.com/Dudubynatur3/aws-3tier-terraform-nextjs`
 
-Why this is a stronger feature than the current fork-derived cards:
+Reasons to feature:
 
 - original repository, not a fork
 - clear architecture documentation
@@ -100,33 +100,25 @@ Link: `https://github.com/Dudubynatur3/dev-onboarding-automation`
 
 Evidence includes Terraform, AWS, Bash, Linux user/group management, and repeatable onboarding automation.
 
-## 4. Remove two current cards from authored-work positioning
+## 4. Authorship exclusions
 
 ### `3-Tier-MERN-App`
 
-GitHub metadata identifies `Dudubynatur3/3-Tier-MERN-App` as a fork of `AkingbadeOmosebi/Aksforge`.
+This repository was only forked and no personal implementation work was performed in it.
 
-User clarification confirms that it was only forked and no personal implementation work was performed in that repository.
-
-**Decision: remove it from the portfolio site as personal engineering evidence.**
-
-It does not need to be deleted from GitHub, but the portfolio should not claim its production, GitOps, security, or observability implementation as authored work.
+**Decision: do not present it as personal engineering evidence.**
 
 ### `Azure-Terraform-Project`
 
-GitHub metadata identifies `Dudubynatur3/Azure-Terraform-Project` as a fork of `vincegwu/aks-terraform-project`.
+This was a collaborative Cloud Advisory group project, with the shared repository created by another participant. Aduroja Akintade completed an assigned contribution but the repository is not independently authored.
 
-User clarification: this was the final collaborative group project in the Cloud Advisory training. Vince created the shared repository and Aduroja Akintade completed his assigned project contribution.
+**Decision: do not feature it as independently authored work.**
 
-**Decision: remove it from Featured Work.**
+It may be mentioned only as collaborative training experience if the personal contribution is described precisely.
 
-The experience can remain in career history as collaborative Cloud Advisory project work, but the entire repository should not be presented as independently authored. A future case study is acceptable only if the specific personal contribution can be isolated and evidenced.
+## 5. AI Automation Systems section
 
-## 5. New AI Automation Systems section
-
-Add a dedicated section after Featured Work or immediately before Production Experience.
-
-Heading suggestion:
+Heading:
 
 > AI automation systems.  
 > Built around operational failure points.
@@ -151,9 +143,11 @@ Each item should expose:
 - evidence link
 - testing / control evidence
 
+Do not imply that every evidence link contains a complete reusable workflow export.
+
 ## 6. MedFlow wording
 
-The connected Airtable base is now the strongest data-model source of truth and directly confirms a **six-table relational system**:
+The connected Airtable base is the strongest data-model source of truth and directly confirms a **six-table relational system**:
 
 - `Patients`
 - `Intakes`
@@ -180,11 +174,9 @@ The earlier four-table note came from an incomplete documentation snapshot and s
 
 Detailed schema evidence: `02-medflow-intake-os/DATA_MODEL.md`.
 
-## 7. Production experience
+## 7. Production experience: YTRanker
 
-Keep the YTRanker section substantially as it is.
-
-Retain:
+Keep:
 
 - private production code label
 - March 2026 to July 2026 timeframe
@@ -192,15 +184,58 @@ Retain:
 - 40+ feature branches validated
 - 6 user roles regression tested
 - technical handover
-- verified Upwork client feedback
+- verified client-feedback wording
 
-Add a link to:
+Public case study:
 
 `https://github.com/Dudubynatur3/ai-automation-portfolio/blob/main/commercial-case-studies/ytranker.md`
 
-Do not link to the private source repository.
+Public Upwork profile:
 
-## 8. Working philosophy
+`https://www.upwork.com/freelancers/~01c8ba1b4d2162d9f1?mp_source=share`
+
+### Required site improvement
+
+Near the YTRanker client-feedback quote or case-study CTA, add a visible secondary link/button:
+
+> **Verify on Upwork**
+
+or
+
+> **View Upwork profile**
+
+The link should open in a new tab. Do not state that the portfolio independently verified the Upwork page. Explain only that recruiters/clients can inspect the public freelancer profile and available work-history evidence there.
+
+Also add **Upwork** alongside GitHub, LinkedIn, and Email in the final contact/social surface.
+
+Do not link to the private YTRanker source repository.
+
+## 8. Evidence publication policy
+
+The site should make the public-evidence philosophy clear without sounding defensive.
+
+Recommended concise wording:
+
+> Public case studies expose architecture, screenshots, test results, selected sanitized implementation evidence, and technical decisions. Complete reusable workflow exports are published only for intentionally open demo projects. Commercial/private implementations remain case-study only.
+
+This policy applies across the portfolio.
+
+For the AI Agency project, remove any visible wording such as:
+
+- `public portfolio-safe n8n JSON`
+- `importable workflow`
+- `complete workflow export`
+
+Replace with:
+
+- architecture
+- routing logic
+- test evidence
+- sanitized implementation excerpts/evidence
+
+The WhatsApp AI Order Processor remains the explicit intentionally open DEMO MODE exception.
+
+## 9. Working philosophy
 
 Keep:
 
@@ -216,13 +251,13 @@ Supporting copy should explicitly mention:
 - testing
 - documentation and handover
 
-## 9. Repository hierarchy
+## 10. Repository hierarchy
 
-Add the new repository prominently:
+Prominently link:
 
 `https://github.com/Dudubynatur3/ai-automation-portfolio`
 
-Do not enumerate every public repository as equal proof. Use four evidence tiers:
+Use four evidence tiers:
 
 ### Featured authored systems
 High-confidence, inspectable work.
@@ -238,7 +273,7 @@ Not used as personal engineering evidence unless an independent contribution is 
 
 See `CLOUD_REPOSITORY_AUDIT.md` for the current classification.
 
-## 10. Navigation
+## 11. Navigation
 
 Keep:
 
@@ -251,18 +286,20 @@ Within Work, use:
 
 `All | AI Automation | Cloud / DevOps | SaaS & Integrations`
 
-## 11. Publication gate
+## 12. Final publication gate
 
-Before the revised site is treated as application-ready:
+Before treating a site revision as complete:
 
 - verify every project link
-- remove the 3-Tier-MERN fork from personal work
-- remove the Azure group-project fork from Featured Work
-- add the new AI Automation Portfolio
+- keep the 3-Tier-MERN fork out of personal work
+- keep the Azure group-project fork out of Featured Work
+- retain the AI Automation Portfolio link
 - test mobile layout
 - test every CTA
 - confirm email / LinkedIn / GitHub links
+- add and test the Upwork verification link
 - verify no screenshot exposes credentials or customer data
 - ensure project classifications are visible
-- verify AI Automation Portfolio links render correctly
 - ensure MedFlow is consistently described as the verified six-table implementation
+- ensure AI Agency no longer advertises a full reusable JSON/workflow export
+- keep WhatsApp AI Order Processor clearly labelled as the intentionally open DEMO MODE exception
