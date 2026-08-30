@@ -56,6 +56,8 @@ flowchart LR
 
 The retrieval workflow converts the user's question into a search against the vector store, retrieves relevant document chunks, and makes that context available to the agent before response generation.
 
+Detailed ingestion / retrieval evidence: [`INGESTION_AND_RETRIEVAL.md`](./INGESTION_AND_RETRIEVAL.md)
+
 ## Technologies demonstrated
 
 - n8n AI Agent workflows
@@ -87,6 +89,15 @@ The agent retrieves context from the connected knowledge source before answering
 The training implementation also included controlled prompt-injection testing. A system-prompt exposure problem was observed during testing and the configuration was subsequently corrected and retested.
 
 This is useful portfolio evidence because it demonstrates that an AI workflow should be tested not only for successful answers but also for instruction leakage and adversarial input.
+
+## Evidence package
+
+| Evidence | Public status |
+|---|---|
+| Architecture overview | Published in this README |
+| Ingestion and retrieval implementation notes | [`INGESTION_AND_RETRIEVAL.md`](./INGESTION_AND_RETRIEVAL.md) |
+| Training execution screenshots | Recovered from training/project records and being curated for safe publication |
+| Account-specific workflow export | Not published until credential/configuration references are fully reviewed |
 
 ## Implementation status
 
