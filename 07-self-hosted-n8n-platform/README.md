@@ -8,56 +8,59 @@
 
 Many automation portfolios show only workflows inside a managed editor. This project documents the infrastructure underneath the automation work.
 
-The goal was to run n8n in a self-hosted environment and gain practical experience with the services, persistence, networking, reverse proxying, and troubleshooting involved in operating the platform.
+The goal was to run n8n in self-hosted environments and gain practical experience with persistence, supporting services, reverse proxying, and troubleshooting.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    U[User / Browser] --> T[Traefik Reverse Proxy]
+    U[User / Browser] --> T[Reverse Proxy / HTTPS Pattern]
     T --> N[n8n]
     N --> P[(PostgreSQL)]
     N --> R[(Redis)]
     T --> C[Chatwoot]
-    C --> P2[(Chatwoot Database / Persistence)]
     C --> S[Sidekiq Worker]
-    T --> H[HTTPS / Custom Domain]
 ```
 
-## Components
+This diagram represents the wider platform pattern. The recovered evidence comes from multiple self-hosted environments rather than one single all-in-one production stack.
+
+## Components demonstrated across the environments
 
 ### n8n
 Workflow orchestration and execution environment.
 
 ### PostgreSQL
-Persistent database layer used instead of relying on an ephemeral workflow container.
+Persistence used in the wider self-hosted automation architecture.
 
 ### Redis
-Supporting service used within the broader automation / messaging environment.
+Supporting service present in the broader automation / messaging environment.
 
 ### Traefik
-Reverse proxy used for routing and HTTPS-oriented deployment patterns.
+Reverse-proxy and HTTPS/custom-domain deployment patterns documented in the production-style hosting work.
 
 ### Chatwoot
-Messaging and support platform integrated into the wider automation environment for WhatsApp/customer-conversation workflows.
+Messaging/support platform used in the wider WhatsApp/customer-conversation automation environment.
 
 ## Operational experience demonstrated
 
 - repeated Docker-based n8n setup
-- Docker Compose service orchestration
-- persistence planning
-- container networking
-- service-to-service connectivity
-- reverse proxy configuration patterns
+- persistent Docker volumes
+- Docker Compose / multi-service architecture
+- PostgreSQL and Redis platform components
+- container networking and service connectivity
+- Chatwoot + Sidekiq environment exposure
+- reverse-proxy patterns
 - HTTPS and custom-domain deployment patterns
 - troubleshooting self-hosted services
-- maintaining automation and messaging components in the same environment
+- workflow backup/recovery awareness
+
+Detailed environment-by-environment evidence: [`DEPLOYMENT_EVIDENCE.md`](./DEPLOYMENT_EVIDENCE.md)
 
 ## Evidence boundary
 
-An older development environment contained approximately 21 workflows. That number describes the development environment, not 21 independently verified production deployments.
+An older development environment contained approximately 21 workflows. That number describes the recovered development environment, not 21 independently verified production deployments.
 
-The defensible portfolio claim is that I built and operated a self-hosted n8n environment and used it for hands-on automation work, including messaging and CRM-style workflows.
+The portfolio also keeps separate the plain local Docker n8n setup, the wider Chatwoot messaging stack, and the production-style Traefik/HTTPS hosting pattern rather than merging all components into one unsupported claim.
 
 ## Production hardening considerations
 
