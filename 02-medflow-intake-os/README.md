@@ -2,7 +2,7 @@
 
 **Status:** Completed client-style portfolio system using synthetic healthcare data  
 **Stack:** Jotform, Make.com, Airtable, Google Sheets, Gmail/Outlook, Google Calendar  
-**Pattern:** Intake validation, deduplication, routing, CRM writes, audit logging, notifications, provisional scheduling
+**Pattern:** Intake validation, deduplication, case creation, task generation, routing, CRM writes, audit logging, notifications, provisional scheduling
 
 ## Business problem
 
@@ -14,51 +14,78 @@ This project demonstrates an auditable automation design for that intake process
 
 ## System architecture
 
-The recovered project documentation defines MedFlow as an event-driven pipeline:
-
 ```mermaid
 flowchart TD
     A[Patient] --> B[Jotform Intake]
     B -->|Webhook| C[Make.com Orchestration]
     C --> D[Validate and Normalize]
     D --> E[Deduplicate / Patient Lookup]
-    E --> F[Airtable CRM]
+    E --> P[Patients]
+    D --> I[Intakes]
+    I --> CA[Create Case]
+    CA --> CSE[Cases]
+    CSE --> T[Generate Tasks]
+    T --> TS[Tasks]
     D --> G{Main Router}
-    G --> H[Staff Notification]
-    G --> I[Patient Confirmation]
-    G --> J[Provisional Calendar Action]
-    C --> K[Google Sheets Append-only Audit Log]
-    F --> K
+    G --> ST[Assign / Notify Staff]
+    ST --> S[Staff]
+    G --> R[Routing_Log]
+    G --> PC[Patient Confirmation]
+    G --> CAL[Provisional Calendar Action]
+    R --> AUDIT[Google Sheets Append-only Audit Log]
 ```
 
-Make.com orchestrates validation, deduplication, routing, CRM writes, audit logging, and notifications. Airtable is the system of record. Google Sheets is the append-only audit log. Gmail/Outlook and Google Calendar support communication and provisional scheduling.
+Make.com orchestrates validation, deduplication, patient create/update, intake creation, case creation, task generation, routing, notifications, and audit logging. Airtable is the operational system of record. Google Sheets provides the append-only audit surface used for portfolio-visible traceability.
 
 ## Airtable data model
 
-The original documented CRM schema contains four tables:
+I re-verified the live connected Airtable base rather than relying only on the recovered documentation. The current MedFlow CRM contains **six tables**:
 
-- `Patients`
-- `Intakes`
-- `Routing_Log`
-- `Staff`
+1. `Patients`
+2. `Intakes`
+3. `Cases`
+4. `Tasks`
+5. `Routing_Log`
+6. `Staff`
 
-This is the table structure supported by the recovered project package and is the structure documented here.
+The tables are linked relationally rather than operating as isolated sheets:
+
+- `Patients` links to `Intakes` and `Cases`
+- `Intakes` links to the `Patient`, resulting `Cases`, and `Routing_Log`
+- `Cases` links to the `Patient`, source `Intake`, `Staff Owner`, and generated `Tasks`
+- `Tasks` links to the parent `Case` and `Assigned Staff`
+- `Routing_Log` links to the source `Intake` and `Assigned Staff`
+- `Staff` links back to `Cases`, `Tasks`, and `Routing_Log`
+
+Detailed schema notes: [`DATA_MODEL.md`](./DATA_MODEL.md)
 
 ## Key implementation logic
 
 ### Duplicate protection
 
-The workflow searches for an existing patient before creating a new identity record. The design uses email as the primary lookup and phone as a fallback where required.
+The workflow searches for an existing patient before creating a new identity record. Email is the primary lookup and normalized phone is available as a fallback matching key.
+
+### Intake persistence
+
+Each submitted intake is stored separately from the patient identity record. The live `Intakes` table contains fields for self-reported acuity, symptom summary, duration, visit type, service needed, consent, route, priority, source, form version, and linked patient/case/routing records.
+
+### Case creation
+
+Operational handling is represented through a separate `Cases` table. Cases track route, priority, status, opened/closed timestamps, notes, patient, source intake, staff owner, and related tasks.
+
+### Task generation
+
+Follow-up actions are represented through the `Tasks` table rather than being embedded only in case notes. Tasks can be assigned to synthetic staff and carry type, status, due/completed timestamps, notes, and the parent case relationship.
 
 ### Jotform pre-sorting
 
 Jotform conditional logic keeps the intake form focused, surfaces emergency guidance where appropriate, and displays follow-up questions only when needed.
 
-The form **pre-sorts** the submission. Make.com remains responsible for the final operational routing decision.
+The form pre-sorts the submission. Make.com remains responsible for the final operational routing decision.
 
-### Make.com routing precedence
+### Routing precedence
 
-The recovered scenario documentation defines a top-down routing model. Higher-priority rules win. The first documented controls include:
+The recovered scenario documentation defines a top-down routing model. Higher-priority controls include:
 
 1. required fields missing → `NEEDS_REVIEW`
 2. contact or data consent missing → `MISSING_CONSENT`
@@ -68,9 +95,9 @@ This ordering prevents incomplete or non-consented submissions from being treate
 
 ### Audit logging
 
-The Google Sheets audit log is designed as append-only operational evidence. It records what happened during the scenario without duplicating unnecessary clinical detail.
+`Routing_Log` stores operational routing evidence including route, priority, result, action taken, scenario run ID, masked patient email, phone last four digits, consent status, deduplication result, source intake, assigned staff, and error information.
 
-The documentation explicitly uses a minimal-data-routing approach, including masked identifiers in the audit surface rather than copying full clinical narratives into the log.
+Google Sheets provides an additional append-only audit / backup layer.
 
 ### Staff notifications
 
@@ -78,23 +105,21 @@ Staff email templates are designed to carry only the operational information nee
 
 ### Patient communication
 
-Patient-facing templates are designed to acknowledge the intake without implying a diagnosis. The recovered documentation explicitly avoids echoing unnecessary clinical detail back into email.
+Patient-facing templates acknowledge the intake without implying a diagnosis or copying unnecessary clinical detail into email.
 
 ## Field mapping
 
-The project documents an end-to-end integration contract:
+The project uses an explicit cross-system mapping contract:
 
 ```text
 Jotform unique name
         ↓
 Make.com variable / transform
         ↓
-Airtable field
+Airtable field / linked record
         ↓
 Audit-log column where applicable
 ```
-
-This makes cross-system data mapping explicit rather than relying on undocumented visual connections.
 
 ## Make.com scenario blueprint
 
@@ -102,33 +127,30 @@ Scenario name in the recovered documentation:
 
 **MedFlow - Intake Orchestration v1**
 
-The project package contains a logic-level Make.com blueprint describing modules in build order and their key mappings. It intentionally does not claim that an account-specific Make export can be shared safely without reviewing connection details.
+The project package contains a logic-level Make.com blueprint describing modules in build order and their key mappings. An account-specific Make export is not published until connection-specific details can be verified and sanitized.
 
 ## Test data
 
-The project includes a synthetic patient test set designed to exercise different routes. Test identities use fictional names, `.example` email addresses, and reserved-style test phone numbers.
-
-No real patient information should be used in the public portfolio.
+The project uses synthetic patient and staff data for portfolio testing. No real patient information should be used in the public portfolio.
 
 ## Privacy and scope
 
 - Synthetic data only.
 - HIPAA-aware design discussion, **not** a claim of HIPAA compliance.
 - No real patient information in the public repository.
-- Minimal-data-routing is used for notifications and audit logs.
+- Minimal-data routing is used for notifications and audit logs.
 - Credentials, account IDs, private endpoints, and connection details are excluded from public artifacts.
 
 ## Recovered engineering package
 
-The original project package contains documentation for:
+The project evidence includes:
 
 - business problem summary
 - system architecture
-- Mermaid diagrams
-- Jotform intake form structure
-- Jotform conditional branching logic
-- Airtable CRM schema
-- CRM field mapping
+- Jotform intake structure and conditional logic
+- six-table Airtable CRM schema
+- linked-record relationships
+- field mapping
 - Make.com scenario blueprint
 - routing rules
 - synthetic test data
@@ -145,8 +167,9 @@ Detailed recovered implementation notes: [`IMPLEMENTATION_NOTES.md`](./IMPLEMENT
 | Evidence | Public status |
 |---|---|
 | Architecture and routing model | Published in this README |
+| Live Airtable six-table schema | Verified against connected Airtable base |
+| Detailed relational schema | [`DATA_MODEL.md`](./DATA_MODEL.md) |
 | Recovered implementation notes | [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md) |
-| Original project package | Recovered from prior project records, being curated before public publication |
 | Account-specific Make export | Not published until connection-specific details can be verified and sanitized |
 
 ## Skills demonstrated
@@ -154,8 +177,11 @@ Detailed recovered implementation notes: [`IMPLEMENTATION_NOTES.md`](./IMPLEMENT
 - workflow architecture
 - Jotform conditional logic
 - Make.com orchestration
-- Airtable CRM design
+- Airtable relational CRM design
 - deduplication
+- linked-record modelling
+- case management
+- task generation and assignment
 - cross-system field mapping
 - consent-aware routing
 - audit logging
