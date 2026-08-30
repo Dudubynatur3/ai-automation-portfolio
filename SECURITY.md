@@ -1,6 +1,6 @@
-# Security and Sanitization Policy
+# Security and Evidence Publication Policy
 
-This is a public portfolio repository. It must not contain live credentials, private customer data, or production secrets.
+This is a public portfolio repository. It must not contain live credentials, private customer data, production secrets, proprietary client source code, or unnecessary turnkey implementations.
 
 ## Never commit
 
@@ -14,7 +14,28 @@ This is a public portfolio repository. It must not contain live credentials, pri
 - private document or spreadsheet IDs when they are not intentionally public
 - proprietary client source code
 
-## Public workflow exports
+## Default portfolio policy: evidence-first, not turnkey
+
+For most portfolio systems, publish enough technical evidence to make the engineering inspectable without publishing the complete reusable deployment package.
+
+Preferred public evidence includes:
+
+- architecture and workflow/node maps
+- business-routing rules and data contracts
+- screenshots and execution/test evidence
+- selected sanitized node/configuration excerpts
+- reliability, fallback, deduplication, audit, and human-review decisions
+- setup assumptions without private account details
+
+Complete reusable workflow exports are **withheld by default**.
+
+## Exception: intentionally open demo projects
+
+A complete workflow export may be published when the project is deliberately an open demo/sample and reuse is part of the purpose of the repository.
+
+The WhatsApp AI Order Processor is such an exception: it is explicitly labelled **DEMO MODE**, uses mocked/simulated external integrations, and is intentionally packaged as an importable sample.
+
+## If a demo workflow export is published
 
 Before publishing an n8n export:
 
@@ -25,6 +46,7 @@ Before publishing an n8n export:
 5. remove private instance metadata
 6. inspect Code/HTTP Request nodes for embedded tokens, passwords, endpoints, or headers
 7. verify that screenshots do not reveal secrets in side panels, URLs, browser tabs, or execution data
+8. explicitly label whether integrations are mocked, simulated, or live
 
 ## Data policy
 
