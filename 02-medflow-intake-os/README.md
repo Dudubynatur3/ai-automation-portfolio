@@ -138,6 +138,17 @@ The original project package contains documentation for:
 - QA / test guidance
 - presentation / handover material
 
+Detailed recovered implementation notes: [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md)
+
+## Evidence package
+
+| Evidence | Public status |
+|---|---|
+| Architecture and routing model | Published in this README |
+| Recovered implementation notes | [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md) |
+| Original project package | Recovered from prior project records, being curated before public publication |
+| Account-specific Make export | Not published until connection-specific details can be verified and sanitized |
+
 ## Skills demonstrated
 
 - workflow architecture
