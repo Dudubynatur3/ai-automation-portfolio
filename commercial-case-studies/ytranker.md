@@ -73,6 +73,10 @@ YTRanker demonstrates commercial ownership and production delivery. It therefore
 
 The completed Upwork engagement received a five-star rating. The client's written feedback described the work as professional, responsive, solution-oriented, detail-focused, reliable in resolving issues, and strong in development, integrations, troubleshooting, testing, and technical handover.
 
+**Public Upwork profile:** https://www.upwork.com/freelancers/~01c8ba1b4d2162d9f1?mp_source=share
+
+Recruiters and clients can use the public profile above to inspect the freelancer profile and available work-history evidence directly on Upwork.
+
 ## Skills demonstrated
 
 - production SaaS engineering
