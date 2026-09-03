@@ -33,7 +33,7 @@ flowchart LR
     S2 --> E2[Send Gmail acknowledgement]
     S3 --> E3[Send Gmail acknowledgement]
     S4 --> E4[Send Gmail acknowledgement]
-    X --> E5[Send Gmail acknowledgement]
+    S5 --> E5[Send Gmail acknowledgement]
 ```
 
 ## Why deterministic routing instead of AI classification?
