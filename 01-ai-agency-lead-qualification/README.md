@@ -8,7 +8,7 @@
 
 Businesses can generate leads successfully and still lose opportunities when every enquiry has to be reviewed, categorised, copied into a CRM or spreadsheet, and acknowledged manually.
 
-This workflow automates the operational work after lead capture. It classifies structured enquiries by urgency and budget, records the final status, persists the complete lead record, and sends an acknowledgement immediately.
+This workflow automates the operational work after lead capture. It classifies structured enquiries by urgency and budget, records the final status, persists the lead record, and sends an acknowledgement immediately.
 
 ## Solution
 
@@ -33,7 +33,7 @@ flowchart LR
     S2 --> E2[Send Gmail acknowledgement]
     S3 --> E3[Send Gmail acknowledgement]
     S4 --> E4[Send Gmail acknowledgement]
-    S5 --> E5[Send Gmail acknowledgement]
+    X --> E5[Send Gmail acknowledgement]
 ```
 
 ## Why deterministic routing instead of AI classification?
@@ -64,16 +64,7 @@ Warm and Cold leads do not require budget reclassification.
 
 ## Data persisted
 
-The workflow records the structured lead fields in Google Sheets:
-
-- Full Name
-- Email
-- Service Type
-- Timeline
-- Budget
-- Status
-
-The internal status is retained for operational follow-up, while the customer-facing acknowledgement remains professional and does not expose the internal qualification logic.
+The workflow records structured lead fields in Google Sheets, including name, email, service type, timeline, budget and final status. Internal qualification remains available for operational follow-up while the customer-facing acknowledgement stays separate from the routing logic.
 
 ## Testing evidence
 
@@ -85,51 +76,24 @@ All five final routing outcomes were tested successfully:
 4. Warm
 5. Cold
 
-The test sequence validated:
+The test sequence validated form submission, Switch branch selection, status assignment, Google Sheets persistence and Gmail acknowledgement.
 
-- form submission
-- correct Switch branch selection
-- status assignment
-- Google Sheets append
-- Gmail acknowledgement
-
-Detailed test notes: [`TESTING.md`](./TESTING.md)
+Detailed test record: [`TESTING.md`](./TESTING.md)
 
 ## Reliability and design decisions
 
 - Controlled dropdown inputs reduce ambiguity.
-- Visible branching makes qualification rules inspectable.
-- Each final route assigns a status before downstream actions.
-- CRM persistence occurs before the email step.
-- The workflow uses synthetic test data for portfolio evidence.
-- Public evidence is sanitized and intentionally scoped rather than published as a turnkey deployment package.
+- Visible branching keeps qualification rules inspectable.
+- Each route assigns status before downstream actions.
+- CRM persistence occurs before the acknowledgement step.
+- Synthetic test data is used for public portfolio evidence.
+- Public evidence is sanitized and scoped.
 
-## Public implementation evidence
+## Public evidence
 
-This project publishes enough technical evidence to inspect the engineering decisions without shipping the complete reusable n8n workflow.
+The portfolio shows the verified routing map, five tested final outcomes and direct workflow execution evidence. The reusable account-specific workflow export is not required to inspect the engineering decisions.
 
-Published evidence includes:
-
-- the architecture and node-flow model above
-- exact business-routing rules
-- persisted data contract
-- five-route execution/test record
-- reliability and implementation decisions
-
-The complete deployable n8n export is intentionally **not included on the current public branch**. See [`workflow/README.md`](./workflow/README.md) for the publication rationale.
-
-## Evidence package
-
-| Evidence | Public status |
-|---|---|
-| Architecture / business logic | Published in this README |
-| Five-route test record | [`TESTING.md`](./TESTING.md) |
-| Complete reusable workflow export | Intentionally withheld from the current public branch |
-| Original execution visuals | Recovered from project records and being curated for safe public publication |
-
-## Portfolio positioning
-
-This project demonstrates:
+## Skills demonstrated
 
 - n8n workflow orchestration
 - business-rule mapping
@@ -137,5 +101,5 @@ This project demonstrates:
 - data transformation and status assignment
 - CRM-style persistence
 - automated customer acknowledgement
-- execution testing across multiple outcomes
-- evidence-conscious workflow publishing
+- multi-route execution testing
+- audit-friendly workflow design
