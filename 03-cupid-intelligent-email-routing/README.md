@@ -1,18 +1,18 @@
 # Cupid Errands Intelligent Email Routing
 
-**Status:** Completed structured AI automation project  
-**Stack:** n8n, OpenRouter, Email/Gmail, Slack, structured JSON output  
-**Pattern:** AI intent classification, duplicate protection, confidence fallback, department routing, logging
+**Status:** Completed AI automation project  
+**Stack:** n8n, Google Gemini, Gmail, Google Sheets, Slack, structured output  
+**Pattern:** AI intent classification, duplicate protection, deterministic department routing, fallback handling, processed-state tracking
 
 ## Business problem
 
-A shared inbox becomes a bottleneck when staff must manually read every message, decide which department owns it, forward it, notify the right team, and avoid processing the same email twice.
+A shared inbox becomes a bottleneck when staff must manually read every message, determine which department owns it, forward it, notify the right team, and avoid processing the same email twice.
 
-This workflow automates that routing problem while keeping a safe default path for uncertain classifications.
+This workflow automates that routing problem while keeping operational control explicit and inspectable.
 
 ## Departments
 
-The routing model supports five operational destinations:
+The workflow routes messages to five operational destinations:
 
 1. Sales
 2. Logistics
@@ -20,112 +20,93 @@ The routing model supports five operational destinations:
 4. Customer Support
 5. Office / Admin
 
-Office / Admin also acts as the fallback route when classification confidence is insufficient or the result is invalid.
+Office / Admin also provides the default operational path when the classification cannot be mapped safely to a specialist route.
 
-## Architecture
+## Final workflow architecture
 
 ```mermaid
 flowchart LR
-    A[Incoming Email] --> B[Extract Subject, Body, Sender, Message ID]
-    B --> C[Lookup Processed Emails]
-    C --> D{Already Processed?}
-    D -->|Yes| X[Stop]
-    D -->|No| E[AI Classifier]
-    E --> F[Structured JSON: department, confidence, reason]
-    F --> G{Valid result and confidence OK?}
-    G -->|No| H[Route to Office / Admin]
-    G -->|Yes| I{Department Switch}
-    I --> S[Sales]
-    I --> L[Logistics]
-    I --> BIL[Billing]
-    I --> CS[Customer Support]
-    I --> O[Office / Admin]
-    S --> N1[Department Email + Slack]
-    L --> N2[Department Email + Slack]
-    BIL --> N3[Department Email + Slack]
-    CS --> N4[Department Email + Slack]
-    O --> N5[Department Email + Slack]
-    H --> N5
-    N1 --> Z[Mark Processed / Log]
-    N2 --> Z
-    N3 --> Z
-    N4 --> Z
-    N5 --> Z
+    A[Gmail Trigger] --> B[Edit Fields]
+    B --> C[Duplicate Guard / Processed Email Check]
+    C --> D[Google Gemini AI Classifier]
+    D --> E[Structured Output Parser]
+    E --> F{Department Router}
+    F --> S[Sales]
+    F --> L[Logistics]
+    F --> BIL[Billing]
+    F --> CS[Customer Support]
+    F --> O[Office / Admin]
+    S --> S1[Sales Gmail]
+    S1 --> S2[Sales Slack]
+    L --> L1[Logistics Gmail]
+    L1 --> L2[Logistics Slack]
+    BIL --> B1[Billing Gmail]
+    B1 --> B2[Billing Slack]
+    CS --> C1[Support Gmail]
+    C1 --> C2[Support Slack]
+    O --> O1[Office/Admin Gmail]
+    O1 --> O2[Office/Admin Slack]
+    S2 --> Z[Mark Processed]
+    L2 --> Z
+    B2 --> Z
+    C2 --> Z
+    O2 --> Z
 ```
 
 Detailed control architecture: [`ARCHITECTURE.md`](./ARCHITECTURE.md)
 
 ## Duplicate protection
 
-Before AI classification, the workflow checks the incoming Gmail/message ID against a processed-email data store.
-
-If the ID already exists, processing stops. This prevents repeated forwarding and repeated Slack notifications.
+Before classification, the workflow checks the incoming message identifier against the processed-email tracking layer. Messages that have already been handled are not routed again, preventing repeated forwarding and repeated Slack notifications.
 
 ## AI classification contract
 
-The classifier receives the email subject and body and returns structured data containing:
+Google Gemini interprets the email and returns structured output for downstream execution. The classification layer produces fields such as:
 
 - `department`
 - `confidence`
 - `reason`
 
-Structured output makes the downstream workflow deterministic. The AI interprets the message, but the routing logic is still controlled by explicit workflow rules.
+The LLM is responsible for interpreting unstructured intent. Routing remains controlled by explicit n8n workflow logic.
 
-## Confidence and fallback handling
+## Deterministic routing
 
-A classification is not accepted blindly.
+The Department Router maps the structured `department` value to the corresponding branch. This keeps the execution path transparent even though AI is used upstream for interpretation.
 
-If the result is invalid or below the configured confidence threshold, the workflow routes the message to **Office / Admin** rather than guessing a specialist department.
+Each branch performs the department-specific delivery actions before the workflow updates its processed state.
 
-This creates an operational safety net for ambiguous messages.
+## Delivery and state tracking
 
-## Department actions
+Each route triggers:
 
-Each department route supports two actions:
+- department-specific Gmail delivery
+- department-specific Slack notification
+- final processed-state update
 
-- send/forward to the relevant department email
-- notify the relevant Slack channel
-
-After successful routing, the email is marked as processed and logged with operational metadata such as message ID, department, sender, subject, processing time, and status.
-
-## Failure path
-
-The architecture includes a separate exception pattern:
-
-- AI API failure or workflow error
-- do not mark the email as processed
-- log the error
-- notify Office / Admin in Slack
-
-This matters because marking a failed email as processed would hide work that still needs attention.
+The final state update closes the loop and supports duplicate prevention on later runs.
 
 ## Engineering decisions
 
-- AI is used only for unstructured intent interpretation.
-- Duplicate protection happens before expensive AI work.
-- Structured output separates model reasoning from workflow execution.
-- Low-confidence results fall back to a human-safe operational route.
-- Failed runs are not falsely recorded as successful.
-- Logging provides an audit trail for downstream review.
+- AI is used for unstructured email interpretation, not for uncontrolled execution.
+- Duplicate protection occurs before repeated downstream actions.
+- Structured output creates a machine-readable boundary between AI interpretation and workflow routing.
+- Department execution is deterministic and inspectable.
+- Office / Admin provides an operational fallback path.
+- Processed-state tracking supports traceability and prevents repeat handling.
 
-## Evidence package
+## Public evidence
 
-| Evidence | Public status |
-|---|---|
-| Architecture and business logic | Published in this README |
-| Detailed control design | [`ARCHITECTURE.md`](./ARCHITECTURE.md) |
-| Original hand-drawn architecture diagram | Recovered from project records, pending safe public image publication |
-| Account-specific n8n export | Not published until source export is recovered and sanitized |
+The public portfolio includes the verified final workflow architecture and an actual n8n workflow capture showing the implemented Gmail, Gemini, routing, Slack and processed-state branches.
 
 ## Skills demonstrated
 
 - n8n workflow orchestration
+- Google Gemini integration
 - AI intent classification
-- prompt / structured-output design
+- structured-output design
 - JSON handling
 - deduplication
-- confidence gating
-- operational fallbacks
-- Slack and email integration patterns
-- error handling
-- audit logging
+- deterministic routing
+- Gmail and Slack integrations
+- fallback design
+- operational state tracking
