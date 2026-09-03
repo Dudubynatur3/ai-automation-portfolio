@@ -4,20 +4,20 @@
 
 MedFlow Intake OS is a client-style portfolio implementation built with synthetic healthcare data. Its purpose is to demonstrate structured intake automation, data integrity, routing controls, auditability, case handling, task generation, and human handoff.
 
-## Verified system flow
+## System flow
 
 ```text
 Jotform
-→ Make.com
+→ Make
 → Airtable
 → Google Sheets
 → Gmail / Outlook
 → Google Calendar
 ```
 
-## Airtable data model, re-verified from the live base
+## Airtable operational model
 
-Direct inspection of the connected MedFlow Airtable base confirms **six tables**:
+The implementation uses six linked operational tables:
 
 - `Patients`
 - `Intakes`
@@ -26,13 +26,11 @@ Direct inspection of the connected MedFlow Airtable base confirms **six tables**
 - `Routing_Log`
 - `Staff`
 
-An earlier recovered documentation snapshot referenced four core tables, but the connected Airtable implementation is the stronger source of truth and confirms that `Cases` and `Tasks` are part of the implemented data model.
-
 See [`DATA_MODEL.md`](./DATA_MODEL.md) for the relational structure and representative fields.
 
 ## Intake processing
 
-The intake form collects structured information and passes it to Make.com for validation and downstream processing.
+The intake form collects structured information and passes it to Make for validation and downstream processing.
 
 Key controls include:
 
@@ -62,46 +60,30 @@ The design goal is to avoid creating unnecessary duplicate patient identities be
 
 ## Case and task handling
 
-The live Airtable schema separates operational handling from intake data:
+The data model separates operational handling from intake data:
 
 - `Cases` tracks route, priority, status, patient, source intake, staff owner, timestamps, notes, and related tasks.
 - `Tasks` tracks follow-up work, due/completed timestamps, status, notes, parent case, and assigned staff.
 
-This separation makes operational ownership and follow-up work inspectable rather than hiding everything in a single record.
+This separation keeps operational ownership and follow-up work inspectable rather than hiding everything in a single record.
 
 ## Routing and notifications
 
-The workflow separates operational routing from the form itself. Jotform can shape the intake experience, while Make.com determines downstream actions based on the submitted data.
+The workflow separates operational routing from the form itself. Jotform shapes the intake experience, while Make determines downstream actions based on submitted data.
 
 Notifications are designed around minimum necessary information rather than copying the full intake record into every destination.
 
 ## Audit design
 
-The `Routing_Log` is treated as an append-oriented audit surface.
+`Routing_Log` acts as an append-oriented audit surface and includes fields for routing result, route, priority, routed timestamp, action taken, error information, scenario run identifier, masked contact data, consent status, deduplication result, linked intake, and assigned staff.
 
-The live schema includes fields for:
-
-- routing result
-- route
-- priority
-- routed timestamp
-- action taken
-- error message
-- scenario run ID
-- masked patient email
-- patient phone last four digits
-- consent status
-- deduplication result
-- linked intake
-- assigned staff
-
-Google Sheets provides an additional portfolio-visible audit / backup layer.
+Google Sheets provides an additional portfolio-visible audit and backup layer.
 
 ## Human-in-the-loop boundary
 
 The system intentionally keeps a human handoff path for cases where automation should not make an unsupported decision.
 
-That design choice is important because the project demonstrates workflow engineering, not autonomous clinical decision-making.
+This demonstrates workflow engineering rather than autonomous clinical decision-making.
 
 ## Privacy boundary
 
@@ -113,7 +95,7 @@ That design choice is important because the project demonstrates workflow engine
 ## What this project demonstrates
 
 - Jotform form design
-- Make.com orchestration
+- Make orchestration
 - six-table Airtable relational workflow design
 - cross-system field mapping
 - duplicate prevention
