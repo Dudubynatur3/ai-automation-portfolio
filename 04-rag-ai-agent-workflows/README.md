@@ -21,7 +21,7 @@ flowchart LR
     B --> F[Grounded Response]
 ```
 
-The chatbot uses an AI Agent with model access, memory, and a Google Docs retrieval tool. The agent is instructed to use the knowledge source rather than answering from unsupported assumptions.
+The chatbot combines an AI Agent with model access, session memory and a Google Docs retrieval tool. The system is configured to use the connected knowledge source rather than rely on unsupported assumptions.
 
 ## 2. Vector ingestion pipeline
 
@@ -33,13 +33,13 @@ flowchart LR
     D --> E[Supabase Vector Store]
 ```
 
-The ingestion workflow demonstrates the data path from a newly created document to vector storage:
+The ingestion flow covers:
 
-- detect file creation in Google Drive
-- download the file
-- load and split document content
-- convert chunks to embeddings
-- persist vectors and metadata in Supabase
+- detecting new source documents in Google Drive
+- downloading document content
+- loading and splitting content into retrievable units
+- generating embeddings
+- storing document chunks, metadata and vectors in Supabase
 
 ## 3. Vector retrieval chatbot
 
@@ -54,63 +54,35 @@ flowchart LR
     B --> G[Grounded Answer]
 ```
 
-The retrieval workflow converts the user's question into a search against the vector store, retrieves relevant document chunks, and makes that context available to the agent before response generation.
+The retrieval workflow uses semantic similarity search against the vector store, returns relevant document chunks and makes that context available to the agent before response generation.
 
-Detailed ingestion / retrieval evidence: [`INGESTION_AND_RETRIEVAL.md`](./INGESTION_AND_RETRIEVAL.md)
+Detailed ingestion and retrieval implementation: [`INGESTION_AND_RETRIEVAL.md`](./INGESTION_AND_RETRIEVAL.md)
 
 ## Technologies demonstrated
 
 - n8n AI Agent workflows
 - OpenRouter chat-model access
-- OpenAI embedding model integration
-- Google Docs as a knowledge source
+- OpenAI embeddings
+- Google Docs knowledge tooling
 - Google Drive document ingestion
 - Supabase / pgvector storage
 - vector similarity retrieval
 - agent session memory
 - structured system prompting
 
-## Retrieval concepts demonstrated
-
-### Chunking and embeddings
-
-Documents are split into smaller retrievable units before embedding. Embeddings convert those chunks into vectors that can be compared semantically with a user's query.
-
-### Vector storage
-
-Supabase stores the document content, metadata, and embedding vectors used for similarity search.
-
-### Grounded response generation
-
-The agent retrieves context from the connected knowledge source before answering, reducing reliance on unsupported model memory.
-
 ## Security testing
 
-The training implementation also included controlled prompt-injection testing. A system-prompt exposure problem was observed during testing and the configuration was subsequently corrected and retested.
+The training implementation included controlled prompt-injection testing. A system-prompt exposure issue was identified during testing, the configuration was corrected, and the workflow was retested.
 
-This is useful portfolio evidence because it demonstrates that an AI workflow should be tested not only for successful answers but also for instruction leakage and adversarial input.
+This is relevant engineering evidence because AI workflows need validation for instruction leakage and adversarial input as well as normal successful responses.
 
-## Evidence package
+## Public evidence
 
-| Evidence | Public status |
-|---|---|
-| Architecture overview | Published in this README |
-| Ingestion and retrieval implementation notes | [`INGESTION_AND_RETRIEVAL.md`](./INGESTION_AND_RETRIEVAL.md) |
-| Training execution screenshots | Recovered from training/project records and being curated for safe publication |
-| Account-specific workflow export | Not published until credential/configuration references are fully reviewed |
+The public portfolio presents the verified ingestion and retrieval architecture, vector-store implementation evidence, grounded retrieval flow and prompt-injection correction. Account-specific credentials, private document identifiers and environment configuration are excluded.
 
 ## Implementation status
 
-This repository does **not** claim an enterprise production RAG deployment. It documents a hands-on training implementation that demonstrates practical knowledge of:
-
-- ingestion pipelines
-- embeddings
-- vector databases
-- semantic retrieval
-- agent memory
-- tool use
-- grounded answering
-- prompt-injection testing
+This is a hands-on training implementation, not a claim of an enterprise production RAG deployment. It demonstrates practical knowledge of ingestion pipelines, embeddings, vector databases, semantic retrieval, agent memory, tool use, grounded answering and AI workflow security testing.
 
 ## Skills demonstrated
 
@@ -118,7 +90,7 @@ This repository does **not** claim an enterprise production RAG deployment. It d
 - AI-agent orchestration
 - vector retrieval
 - embeddings
-- Supabase
+- Supabase / pgvector
 - OpenRouter
 - OpenAI embeddings
 - n8n AI nodes
